@@ -79,12 +79,12 @@ const AddTodo = ({ onAddTodo }: AddTodoProps) => {
         addTodo();
       }
     },
-    []
+    [addTodo]
   );
 
   const onClickAdd = useCallback(() => {
     addTodo();
-  }, []);
+  }, [addTodo]);
 
   return (
     <Container>

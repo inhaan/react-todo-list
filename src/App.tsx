@@ -4,11 +4,16 @@ import AddTodo from "./components/AddTodo";
 import Header from "./components/Header";
 import TodoItem from "./components/TodoItem";
 import TodoList from "./components/TodoList";
+import Toolbar from "./components/Toolbar";
 import useTodoState from "./hooks/useTodoState";
+import { Todo } from "./interfaces";
 
 const Container = styled.div`
   margin: 2rem auto 0;
   max-width: 500px;
+`;
+
+const Main = styled.div`
   border-radius: 0.3rem;
   background-color: #fff;
   overflow: hidden;
@@ -29,12 +34,20 @@ function App() {
     dispatch({ type: "ADD", contents });
   }, []);
 
+  const onAddTodos = useCallback((todos: Todo[]) => {
+    dispatch({ type: "ADD_TODOS", todos });
+  }, []);
+
   const onChangeTodoComplete = useCallback((id: string, complete: boolean) => {
     dispatch({ type: "CHANGE_COMPLETE", id, complete });
   }, []);
 
   const onRemoveTodo = useCallback((id: string) => {
     dispatch({ type: "REMOVE", id });
+  }, []);
+
+  const onRemoveAllTodo = useCallback(() => {
+    dispatch({ type: "REMOVE_ALL" });
   }, []);
 
   const sortedTodos = useMemo(() => {
@@ -48,19 +61,25 @@ function App() {
 
   return (
     <Container>
-      <Header></Header>
-      <AddTodo onAddTodo={onAddTodo}></AddTodo>
-      <TodoList>
-        {sortedTodos.map((todo) => (
-          <TodoItem
-            key={todo.id}
-            todo={todo}
-            onChangeTodoComplete={onChangeTodoComplete}
-            onRemoveTodo={onRemoveTodo}
-          ></TodoItem>
-        ))}
-        {!sortedTodos.length && <Message>😄 할 일이 없습니다</Message>}
-      </TodoList>
+      <Toolbar
+        onAddTodos={onAddTodos}
+        onRemoveAllTodo={onRemoveAllTodo}
+      ></Toolbar>
+      <Main>
+        <Header></Header>
+        <AddTodo onAddTodo={onAddTodo}></AddTodo>
+        <TodoList>
+          {sortedTodos.map((todo) => (
+            <TodoItem
+              key={todo.id}
+              todo={todo}
+              onChangeTodoComplete={onChangeTodoComplete}
+              onRemoveTodo={onRemoveTodo}
+            ></TodoItem>
+          ))}
+          {!sortedTodos.length && <Message>😄 할 일이 없습니다</Message>}
+        </TodoList>
+      </Main>
     </Container>
   );
 }

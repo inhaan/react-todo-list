@@ -5,6 +5,10 @@ interface TodoAddAction {
   type: "ADD";
   contents: string;
 }
+interface TodoAddTodosAction {
+  type: "ADD_TODOS";
+  todos: Todo[];
+}
 interface TodoChangeCompleteAction {
   type: "CHANGE_COMPLETE";
   id: string;
@@ -14,9 +18,15 @@ interface TodoRemoveAction {
   type: "REMOVE";
   id: string;
 }
+interface TodoRemoveAllAction {
+  type: "REMOVE_ALL";
+}
+
 export type TodoAction =
   | TodoAddAction
+  | TodoAddTodosAction
   | TodoRemoveAction
+  | TodoRemoveAllAction
   | TodoChangeCompleteAction;
 
 const todoReducer = (state: Todo[], action: TodoAction) => {
@@ -29,6 +39,9 @@ const todoReducer = (state: Todo[], action: TodoAction) => {
       };
       return [...state, todo];
     }
+    case "ADD_TODOS": {
+      return [...state, ...action.todos];
+    }
     case "CHANGE_COMPLETE": {
       const todo = state.find((x) => x.id === action.id);
       if (!todo) {
@@ -39,6 +52,9 @@ const todoReducer = (state: Todo[], action: TodoAction) => {
     }
     case "REMOVE": {
       return state.filter((x) => x.id != action.id);
+    }
+    case "REMOVE_ALL": {
+      return [];
     }
     default: {
       return [...state];

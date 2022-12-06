@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback } from "react";
+import { ChangeEvent, useCallback, memo } from "react";
 import styled, { css } from "styled-components";
 import { IoIosRemoveCircleOutline } from "react-icons/io";
 import { Todo } from "../interfaces";
@@ -16,7 +16,7 @@ interface ContentsProps {
 const Container = styled.li`
   display: flex;
   justify-content: space-between;
-  padding: 1rem 0.7rem;
+  padding: 0.7rem 0.7rem;
 `;
 
 const CheckBox = styled.input`
@@ -78,4 +78,4 @@ const TodoItem = ({
   );
 };
 
-export default TodoItem;
+export default memo(TodoItem);
