@@ -45,10 +45,18 @@ const todoReducer = (state: Todo[], action: TodoAction) => {
     case "CHANGE_COMPLETE": {
       const todo = state.find((x) => x.id === action.id);
       if (!todo) {
-        return [...state];
+        return state;
       }
-      todo.complete = action.complete; // TODO 불변성 유지해야 함
-      return [...state];
+
+      const newState = [];
+      for (const item of state) {
+        if (item === todo) {
+          newState.push({ ...item, complete: action.complete });
+        } else {
+          newState.push(item);
+        }
+      }
+      return newState;
     }
     case "REMOVE": {
       return state.filter((x) => x.id != action.id);
